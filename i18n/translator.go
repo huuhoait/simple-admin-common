@@ -43,11 +43,13 @@ type Translator struct {
 
 // NewBundle returns a bundle from FS.
 func (l *Translator) NewBundle(file embed.FS) {
-	bundle := i18n.NewBundle(language.Chinese)
+	bundle := i18n.NewBundle(language.English)
 	bundle.RegisterUnmarshalFunc("json", json.Unmarshal)
 	_, err := bundle.LoadMessageFileFS(file, "locale/zh.json")
 	logx.Must(err)
 	_, err = bundle.LoadMessageFileFS(file, "locale/en.json")
+	logx.Must(err)
+	_, err = bundle.LoadMessageFileFS(file, "locale/vi.json")
 	logx.Must(err)
 
 	l.bundle = bundle
@@ -57,9 +59,11 @@ func (l *Translator) NewBundle(file embed.FS) {
 func (l *Translator) NewTranslator() {
 	l.supportLangs = append(l.supportLangs, language.Chinese)
 	l.supportLangs = append(l.supportLangs, language.English)
+	l.supportLangs = append(l.supportLangs, language.Vietnamese)
 	l.localizer = make(map[language.Tag]*i18n.Localizer)
 	l.localizer[language.Chinese] = i18n.NewLocalizer(l.bundle, language.Chinese.String())
 	l.localizer[language.English] = i18n.NewLocalizer(l.bundle, language.English.String())
+	l.localizer[language.English] = i18n.NewLocalizer(l.bundle, language.Vietnamese.String())
 }
 
 // Trans used to translate any i18n string.
