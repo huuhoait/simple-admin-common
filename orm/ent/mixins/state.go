@@ -12,19 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package parse
+package mixins
 
 import (
-	"github.com/zeromicro/go-zero/core/logx"
-	"golang.org/x/text/language"
+	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/mixin"
 )
 
-func ParseTags(lang string) []language.Tag {
-	tags, _, err := language.ParseAcceptLanguage(lang)
-	if err != nil {
-		logx.Errorw("parse accept-language failed", logx.Field("detail", err))
-		return []language.Tag{language.Chinese}
-	}
+// StateMixin implements the ent.Mixin for sharing
+// state fields with package schemas.
+type StateMixin struct {
+	mixin.Schema
+}
 
-	return tags
+func (StateMixin) Fields() []ent.Field {
+	return []ent.Field{
+		field.Bool("state").
+			Default(true).
+			Optional().
+			Comment("State true: normal false: ban | 状态 true 正常 false 禁用").
+			Annotations(entsql.WithComments(true)),
+	}
 }

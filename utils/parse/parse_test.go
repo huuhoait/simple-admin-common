@@ -12,56 +12,45 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package encrypt
+package parse
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"golang.org/x/text/language"
 )
 
-func TestEncrypt(t *testing.T) {
-	tests := []struct {
-		origin string
-	}{
-		{
-			origin: "123456",
-		},
-		{
-			origin: "123456789..",
-		},
-	}
-
-	for _, v := range tests {
-		// test encrypt
-		encryptedData := BcryptEncrypt(v.origin)
-		result := BcryptCheck(v.origin, encryptedData)
-		assert.Equal(t, result, true)
-	}
-}
-
-func TestBcryptCheck(t *testing.T) {
+func TestParseTags(t *testing.T) {
 	type args struct {
-		password string
-		hash     string
+		lang string
 	}
 	tests := []struct {
 		name string
 		args args
-		want bool
+		want []language.Tag
 	}{
 		{
-			name: "test1",
-			args: args{
-				password: "simple-admin",
-				hash:     "$2a$10$RGY8FVLUSKNMdKQr/y2oi.kh4r/ns6hbpJc.0RP56jd3gazeOJa42",
-			},
-			want: true,
+			name: "testChinese",
+			args: args{lang: "zh"},
+			want: []language.Tag{language.Chinese},
+		},
+		{
+			name: "testEn",
+			args: args{lang: "en"},
+			want: []language.Tag{language.English},
+		},
+		{
+			name: "testWrong",
+			args: args{lang: "one two"},
+			want: []language.Tag{language.Chinese},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, BcryptCheck(tt.args.password, tt.args.hash), "BcryptCheck(%v, %v)", tt.args.password, tt.args.hash)
+			if got := ParseTags(tt.args.lang); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ParseTags() = %v, want %v", got, tt.want)
+			}
 		})
 	}
 }

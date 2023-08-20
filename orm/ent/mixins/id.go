@@ -15,6 +15,7 @@
 package mixins
 
 import (
+	"entgo.io/ent/dialect/entsql"
 	"time"
 
 	"entgo.io/ent"
@@ -22,22 +23,26 @@ import (
 	"entgo.io/ent/schema/mixin"
 )
 
-// BaseIDMixin implements the ent.Mixin for sharing
+// IDMixin implements the ent.Mixin for sharing
 // base fields with package schemas.
-type BaseIDMixin struct {
+type IDMixin struct {
 	// We embed the `mixin.Schema` to avoid
 	// implementing the rest of the methods.
 	mixin.Schema
 }
 
-func (BaseIDMixin) Fields() []ent.Field {
+func (IDMixin) Fields() []ent.Field {
 	return []ent.Field{
 		field.Uint64("id"),
 		field.Time("created_at").
 			Immutable().
-			Default(time.Now),
+			Default(time.Now).
+			Comment("Create Time | 创建日期").
+			Annotations(entsql.WithComments(true)),
 		field.Time("updated_at").
 			Default(time.Now).
-			UpdateDefault(time.Now),
+			UpdateDefault(time.Now).
+			Comment("Update Time | 修改日期").
+			Annotations(entsql.WithComments(true)),
 	}
 }
