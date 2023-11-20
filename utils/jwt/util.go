@@ -12,26 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package mixins
+package jwt
 
-import (
-	"entgo.io/ent"
-	"entgo.io/ent/dialect/entsql"
-	"entgo.io/ent/schema/field"
-	"entgo.io/ent/schema/mixin"
-)
+import "strings"
 
-// SortMixin is the mixin with sort field which
-// is used to sort the data.
-type SortMixin struct {
-	mixin.Schema
-}
-
-func (SortMixin) Fields() []ent.Field {
-	return []ent.Field{
-		field.Uint32("sort").
-			Default(1).
-			Comment("Sort Number | 排序编号").
-			Annotations(entsql.WithComments(true)),
+// StripBearerPrefixFromToken remove the bearer prefix in token string.
+func StripBearerPrefixFromToken(token string) string {
+	if len(token) > 6 && strings.ToUpper(token[0:7]) == "BEARER " {
+		return token[7:]
 	}
+
+	return token
 }
