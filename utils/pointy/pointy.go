@@ -16,6 +16,8 @@ package pointy
 
 import "time"
 
+var zeroTime time.Time
+
 // GetPointer returns pointer from comparable type
 func GetPointer[T comparable](value T) *T {
 	return &value
@@ -53,4 +55,20 @@ func GetTimePointer(value *int64, nsec int64) (result *time.Time) {
 	*result = time.Unix(*value, nsec)
 
 	return result
+}
+
+// GetUnixMilliPointer returns nil when int64 is -621355968000, your time should not be from before 1970
+//
+// Example:
+//
+//	 var zeroTime time.Time
+//		zeroTimeP := GetUnixMilliPointer(zeroTime)
+//		fmt.Println(zeroTimeP)
+//
+// Result:  <nil>
+func GetUnixMilliPointer(value int64) *int64 {
+	if value == zeroTime.UnixMilli() {
+		return nil
+	}
+	return &value
 }
