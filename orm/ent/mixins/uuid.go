@@ -23,7 +23,7 @@ import (
 	"entgo.io/ent/schema/mixin"
 	"github.com/gofrs/uuid/v5"
 
-	uuid2 "github.com/huuhoait/simple-admin-commo/utils/uuidx"
+	uuid2 "github.com/huuhoait/simple-admin-common/utils/uuidx"
 )
 
 // UUIDMixin is the mixin with uuid v7 field which is used for universal unique.

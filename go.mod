@@ -1,4 +1,4 @@
-module github.com/huuhoait/simple-admin-commo
+module github.com/huuhoait/simple-admin-common
 
 go 1.21.0
 
