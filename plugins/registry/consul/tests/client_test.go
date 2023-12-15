@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	_ "github.com/suyuan32/simple-admin-common/plugins/registry/consul"
+	_ "github.com/huuhoait/simple-admin-commo/plugins/registry/consul"
 )
 
 func TestClient(t *testing.T) {
